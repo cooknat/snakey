@@ -1,0 +1,45 @@
+body {
+    margin: 0px;
+    /*font-family: "Major Mono Display", sans-serif;*/
+}
+
+pre {
+    /*font-family: "Major Mono Display", sans-serif;*/
+    margin: 100px auto;
+}
+
+table {
+    margin: 50px auto;
+}
+
+#header {
+    height: 100vh;
+    background-color: #042963;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#container {
+    border: 8px solid #b2dbdb;
+}
+
+#container,
+#game {
+    background-color: #335882;
+    width: 1000px;
+    height: 600px;
+}
+
+.ra {
+    text-align: right;
+}
+
+.la {
+    text-align: left;
+}
+
+th,
+td {
+    padding: 8px 26px;
+}
