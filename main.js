@@ -4440,7 +4440,7 @@ function _Browser_load(url)
 }
 var elm$core$Basics$False = {$: 'False'};
 var elm$core$Maybe$Nothing = {$: 'Nothing'};
-var author$project$Main$initialModel = {dir: elm$core$Maybe$Nothing, food: elm$core$Maybe$Nothing, gameStarted: false, snake: elm$core$Maybe$Nothing};
+var author$project$Main$initialModel = {direction: elm$core$Maybe$Nothing, food: elm$core$Maybe$Nothing, gameStarted: false, snake: elm$core$Maybe$Nothing};
 var author$project$Main$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
@@ -5436,12 +5436,12 @@ var author$project$Main$Position = F2(
 	function (xPos, yPos) {
 		return {xPos: xPos, yPos: yPos};
 	});
+var author$project$Main$Right = {$: 'Right'};
 var author$project$Main$GotNewDirection = function (a) {
 	return {$: 'GotNewDirection', a: a};
 };
 var author$project$Main$Down = {$: 'Down'};
 var author$project$Main$Left = {$: 'Left'};
-var author$project$Main$Right = {$: 'Right'};
 var author$project$Main$Up = {$: 'Up'};
 var elm$random$Random$addOne = function (value) {
 	return _Utils_Tuple2(1, value);
@@ -5694,7 +5694,7 @@ var author$project$Main$square = 10;
 var author$project$Main$thingRadius = 5;
 var author$project$Main$snakePos = F3(
 	function (model, position, section) {
-		var _n0 = model.dir;
+		var _n0 = model.direction;
 		if (_n0.$ === 'Just') {
 			switch (_n0.a.$) {
 				case 'Up':
@@ -5889,35 +5889,48 @@ var elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var author$project$Main$moveySnakey = function (snake) {
-	var actualSnake = A2(elm$core$Maybe$withDefault, _List_Nil, snake);
-	var h = A2(
-		elm$core$Maybe$withDefault,
-		A2(author$project$Main$Position, -10, -10),
-		elm$core$List$head(actualSnake));
-	var newHead = A2(author$project$Main$Position, h.xPos + 0, h.yPos + author$project$Main$square);
-	var newBody = A2(
-		elm$core$List$take,
-		elm$core$List$length(actualSnake) - 1,
-		actualSnake);
-	var removedPart = A2(
-		elm$core$List$drop,
-		elm$core$List$length(actualSnake) - 1,
-		actualSnake);
-	return _Utils_Tuple2(
-		_Utils_ap(
-			_List_fromArray(
-				[newHead]),
-			newBody),
-		removedPart);
-};
+var author$project$Main$moveySnakey = F2(
+	function (direction, snake) {
+		var actualSnake = A2(elm$core$Maybe$withDefault, _List_Nil, snake);
+		var h = A2(
+			elm$core$Maybe$withDefault,
+			A2(author$project$Main$Position, -10, -10),
+			elm$core$List$head(actualSnake));
+		var newHead = function () {
+			switch (direction.$) {
+				case 'Up':
+					return A2(author$project$Main$Position, h.xPos, h.yPos - author$project$Main$square);
+				case 'Down':
+					return A2(author$project$Main$Position, h.xPos, h.yPos + author$project$Main$square);
+				case 'Left':
+					return A2(author$project$Main$Position, h.xPos - author$project$Main$square, h.yPos);
+				default:
+					return A2(author$project$Main$Position, h.xPos + author$project$Main$square, h.yPos);
+			}
+		}();
+		var newBody = A2(
+			elm$core$List$take,
+			elm$core$List$length(actualSnake) - 1,
+			actualSnake);
+		var removedPart = A2(
+			elm$core$List$drop,
+			elm$core$List$length(actualSnake) - 1,
+			actualSnake);
+		return _Utils_Tuple2(
+			_Utils_ap(
+				_List_fromArray(
+					[newHead]),
+				newBody),
+			removedPart);
+	});
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Tick':
-				var _n1 = author$project$Main$moveySnakey(model.snake);
+				var dir = A2(elm$core$Maybe$withDefault, author$project$Main$Right, model.direction);
+				var _n1 = A2(author$project$Main$moveySnakey, dir, model.snake);
 				var newSnake = _n1.a;
 				var removedPart = _n1.b;
 				var _n2 = model.gameStarted;
@@ -5965,7 +5978,7 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							dir: elm$core$Maybe$Just(direction)
+							direction: elm$core$Maybe$Just(direction)
 						}),
 					elm$core$Platform$Cmd$none);
 		}
@@ -6080,7 +6093,7 @@ var author$project$Main$view = function (model) {
 				_List_fromArray(
 					[
 						elm$html$Html$text(
-						elm$core$Debug$toString(model.dir) + (' ' + (elm$core$Debug$toString(model.food) + elm$core$Debug$toString(model.snake))))
+						elm$core$Debug$toString(model.direction) + (' ' + (elm$core$Debug$toString(model.food) + elm$core$Debug$toString(model.snake))))
 					])),
 				A2(
 				elm$html$Html$button,

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="acb9cba0-9421-4e82-a96d-dd40f99ffba2" name="Default Changelist" comment="" />
+    <list default="true" id="acb9cba0-9421-4e82-a96d-dd40f99ffba2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmi" beforeDir="false" afterPath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmo" beforeDir="false" afterPath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Snakey.elm" beforeDir="false" afterPath="$PROJECT_DIR$/src/Snakey.elm" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +26,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Snakey.elm">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="574">
-                  <caret line="231" selection-start-line="231" selection-end-line="231" />
+                <state relative-caret-position="690">
+                  <caret line="153" selection-start-line="153" selection-end-line="153" />
                   <folding>
                     <element signature="e#29#43#0" expanded="true" />
                   </folding>
@@ -77,7 +84,11 @@
       <find>update</find>
       <find>randomPositions</find>
       <find>RandomPositions</find>
+      <find>dir</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -105,6 +116,7 @@
     <option name="width" value="1645" />
     <option name="height" value="935" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -134,6 +146,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Elm&#10;HTML" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -180,12 +193,12 @@
       <workItem from="1587546608160" duration="4105000" />
       <workItem from="1587915823765" duration="1603000" />
       <workItem from="1587974528765" duration="4689000" />
-      <workItem from="1588338656684" duration="6245000" />
+      <workItem from="1588338656684" duration="7449000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77431000" />
+    <option name="totallyTimeSpent" value="78635000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="9" y="23" width="1645" height="935" extended-state="0" />
@@ -337,8 +350,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Snakey.elm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
-          <caret line="231" selection-start-line="231" selection-end-line="231" />
+        <state relative-caret-position="690">
+          <caret line="153" selection-start-line="153" selection-end-line="153" />
           <folding>
             <element signature="e#29#43#0" expanded="true" />
           </folding>

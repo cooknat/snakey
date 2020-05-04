@@ -12,7 +12,7 @@ type alias Model =
     { gameStarted: Bool
     , food : Maybe Position
     , snake : Snake
-    , dir :  Maybe Direction }
+    , direction :  Maybe Direction }
 
 type alias Snake = Maybe (List Position)
 
@@ -52,7 +52,7 @@ type Direction
 
 snakePos : Model -> Position -> Int -> Position
 snakePos model position section =
-    case model.dir of
+    case model.direction of
         Just Up ->
             Position (position.xPos * square + thingRadius) (position.yPos * square - (section * square) + thingRadius)
         Just Down ->
@@ -71,7 +71,7 @@ initialModel =
     { gameStarted = False
     , food = Nothing
     , snake = Nothing
-    , dir = Nothing }
+    , direction = Nothing }
 
 
 type Msg
@@ -106,8 +106,11 @@ update msg model =
     case msg of
         Tick _ ->
              let
+                 dir =
+                     Maybe.withDefault Right model.direction
+
                  ( newSnake, removedPart ) =
-                     moveySnakey model.snake
+                     moveySnakey dir model.snake
              in
                 case model.gameStarted of
                     True ->
@@ -126,29 +129,37 @@ update msg model =
             ( { model | snake =  initSnake model position }, Cmd.none)
 
         GotNewDirection direction ->
-                    ({ model | dir = Just direction }, Cmd.none)
+                    ({ model | direction = Just direction }, Cmd.none)
 
 
-moveySnakey : Maybe (List Position) -> (List Position, List Position)
-moveySnakey snake =
+moveySnakey : Direction -> Maybe (List Position) -> (List Position, List Position)
+moveySnakey direction snake =
     let
-            actualSnake =
-                Maybe.withDefault [] snake
+        actualSnake =
+            Maybe.withDefault [] snake
 
-            h =
-                Maybe.withDefault (Position -10 -10) (List.head actualSnake)
+        h =
+            Maybe.withDefault (Position -10 -10) (List.head actualSnake)
 
-            newHead =
-                Position (h.xPos + 0) (h.yPos + square)
+        newHead =
+            case direction of
+                Up ->
+                    Position h.xPos (h.yPos - square)
+                Down ->
+                    Position h.xPos (h.yPos + square)
+                Left ->
+                    Position (h.xPos - square) h.yPos
+                Right ->
+                    Position (h.xPos + square) h.yPos
 
-            newBody =
-                List.take ((List.length actualSnake) - 1) actualSnake
+        newBody =
+            List.take ((List.length actualSnake) - 1) actualSnake
 
-            removedPart =
-                List.drop ((List.length actualSnake) - 1) actualSnake
+        removedPart =
+            List.drop ((List.length actualSnake) - 1) actualSnake
 
-        in
-            ( [ newHead ] ++ newBody, removedPart )
+    in
+        ( [ newHead ] ++ newBody, removedPart )
 
 positionGenerator : Random.Generator Position
 positionGenerator =
@@ -167,7 +178,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ div []
-        [ Html.text <| Debug.toString model.dir ++ " " ++ Debug.toString model.food ++ Debug.toString model.snake ]
+        [ Html.text <| Debug.toString model.direction ++ " " ++ Debug.toString model.food ++ Debug.toString model.snake ]
         , button [ onClick StartGame ]  [ Html.text "start game"]
         , svg
             [ Svg.Attributes.width (String.fromInt width)
