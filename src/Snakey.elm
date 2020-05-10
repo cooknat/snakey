@@ -1,10 +1,12 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Events exposing(onKeyPress)
 import Html exposing (Html, button, div, text, p)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Json.Decode as Decode
 import Time
 import Random
 
@@ -76,6 +78,8 @@ initialModel =
 
 type Msg
     = Tick Time.Posix
+    | CharacterKey Char
+    | ControlKey String
     | StartGame
     | GotNewPosition Position
     | GotNewDirection Direction
@@ -109,15 +113,36 @@ update msg model =
                  dir =
                      Maybe.withDefault Right model.direction
 
+                 crashed =
+                    crash model
+
                  ( newSnake, removedPart ) =
                      moveySnakey dir model.snake
              in
                 case model.gameStarted of
                     True ->
-                        ( { model | snake = Just newSnake }
-                            , Cmd.none )
+                        ( { model | snake = Just newSnake, gameStarted = not crashed }, Cmd.none )
+
                     False ->
                         ( model, Cmd.none )
+
+        CharacterKey 'i' ->
+             ( { model | direction = Just Up }, Cmd.none )
+
+        CharacterKey 'j' ->
+             ( { model | direction = Just Left }, Cmd.none )
+
+        CharacterKey 'k' ->
+             ( { model | direction = Just Right }, Cmd.none )
+
+        CharacterKey 'm' ->
+             ( { model | direction = Just Down }, Cmd.none )
+
+        CharacterKey _ ->
+             ( model, Cmd.none )
+
+        ControlKey _ ->
+             ( model, Cmd.none )
 
         StartGame ->
                 ( { model | gameStarted = True }
@@ -130,6 +155,20 @@ update msg model =
 
         GotNewDirection direction ->
                     ({ model | direction = Just direction }, Cmd.none)
+
+
+crash : Model -> Bool
+crash model =
+    let
+        actualSnake = Maybe.withDefault [] model.snake
+        head = Maybe.withDefault (Position -10 -10) (List.head actualSnake)
+        tail = Maybe.withDefault ([Position -10 -10]) (List.tail actualSnake)
+
+    in
+        if head.xPos < 5 || head.xPos > 995 || head.yPos < 5 || head.yPos > 595 || List.member head tail then
+            True
+        else
+            False
 
 
 moveySnakey : Direction -> Maybe (List Position) -> (List Position, List Position)
@@ -225,10 +264,26 @@ drawThing colour position =
             []
         ]
 
+keyDecoder : Decode.Decoder Msg
+keyDecoder =
+    Decode.map toKey (Decode.field "key" Decode.string)
+
+
+toKey : String -> Msg
+toKey keyValue =
+    case String.uncons keyValue of
+        Just ( char, "" ) ->
+            CharacterKey char
+
+        _ ->
+            ControlKey keyValue
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Time.every 600 Tick
-
+    Sub.batch
+            [ Time.every 600 Tick
+            , onKeyPress keyDecoder
+            ]
 
 main : Program () Model Msg
 main =
@@ -240,11 +295,9 @@ main =
         }
 
 
-
--- 3. sort out directions
--- 4. stop at the edge
--- 5. keyboard input
 -- 6. eat
 -- 7. grow when eaten
--- 8. collision with self
--- 9. start game button either outside board or on a start page.
+-- 8. start game button either outside board or on a start page.
+-- 9. starting snake position should not be same as food position
+-- 10. sort out starting position based on direction and edges
+-- 11. change to arrow keys
