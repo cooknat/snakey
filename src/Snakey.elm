@@ -116,12 +116,19 @@ update msg model =
                  crashed =
                     crash model
 
+                 snacked =
+                     snack model
+
                  ( newSnake, removedPart ) =
                      moveySnakey dir model.snake
              in
                 case model.gameStarted of
                     True ->
-                        ( { model | snake = Just newSnake, gameStarted = not crashed }, Cmd.none )
+                        case snacked of
+                            True ->
+                               ( { model | snake = Just (newSnake ++ removedPart), gameStarted = not crashed }, getPositionCmd )
+                            False ->
+                               ( { model | snake = Just newSnake, gameStarted = not crashed }, Cmd.none )
 
                     False ->
                         ( model, Cmd.none )
@@ -166,6 +173,19 @@ crash model =
 
     in
         if head.xPos < 5 || head.xPos > 995 || head.yPos < 5 || head.yPos > 595 || List.member head tail then
+            True
+        else
+            False
+
+--else if List.member h food then
+snack : Model -> Bool
+snack model =
+    let
+        actualSnake = Maybe.withDefault [] model.snake
+        actualFood = Maybe.withDefault (Position -10 -10) model.food
+
+    in
+        if (List.head actualSnake) == Just actualFood then
             True
         else
             False
@@ -217,8 +237,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ div []
-        [ Html.text <| Debug.toString model.direction ++ " " ++ Debug.toString model.food ++ Debug.toString model.snake ]
-        , button [ onClick StartGame ]  [ Html.text "start game"]
+        [ button [ onClick StartGame ]  [ Html.text "start game"]
         , svg
             [ Svg.Attributes.width (String.fromInt width)
             , Svg.Attributes.height (String.fromInt height)
@@ -242,6 +261,7 @@ view model =
               , drawThing foodColour (Maybe.withDefault (Position 0 0) model.food)
               , Svg.g [] (List.map (drawThing snakeColour) (Maybe.withDefault [] model.snake) )
             ]
+          ]
         ]
 
 drawThing : String -> Position -> Svg.Svg msg
@@ -295,9 +315,10 @@ main =
         }
 
 
--- 6. eat
--- 7. grow when eaten
--- 8. start game button either outside board or on a start page.
--- 9. starting snake position should not be same as food position
+
+
 -- 10. sort out starting position based on direction and edges
 -- 11. change to arrow keys
+-- 12. speed up with each food eaten
+-- 13. start game button either outside board or on a start page
+-- 14. score board and score with each food eaten

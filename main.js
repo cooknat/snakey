@@ -6423,6 +6423,16 @@ var author$project$Main$moveySnakey = F2(
 				newBody),
 			removedPart);
 	});
+var author$project$Main$snack = function (model) {
+	var actualSnake = A2(elm$core$Maybe$withDefault, _List_Nil, model.snake);
+	var actualFood = A2(
+		elm$core$Maybe$withDefault,
+		A2(author$project$Main$Position, -10, -10),
+		model.food);
+	return _Utils_eq(
+		elm$core$List$head(actualSnake),
+		elm$core$Maybe$Just(actualFood)) ? true : false;
+};
 var elm$core$Basics$not = _Basics_not;
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
@@ -6430,6 +6440,7 @@ var author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Tick':
+				var snacked = author$project$Main$snack(model);
 				var dir = A2(elm$core$Maybe$withDefault, author$project$Main$Right, model.direction);
 				var crashed = author$project$Main$crash(model);
 				var _n1 = A2(author$project$Main$moveySnakey, dir, model.snake);
@@ -6437,14 +6448,26 @@ var author$project$Main$update = F2(
 				var removedPart = _n1.b;
 				var _n2 = model.gameStarted;
 				if (_n2) {
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{
-								gameStarted: !crashed,
-								snake: elm$core$Maybe$Just(newSnake)
-							}),
-						elm$core$Platform$Cmd$none);
+					if (snacked) {
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									gameStarted: !crashed,
+									snake: elm$core$Maybe$Just(
+										_Utils_ap(newSnake, removedPart))
+								}),
+							author$project$Main$getPositionCmd);
+					} else {
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									gameStarted: !crashed,
+									snake: elm$core$Maybe$Just(newSnake)
+								}),
+							elm$core$Platform$Cmd$none);
+					}
 				} else {
 					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
 				}
@@ -6574,7 +6597,6 @@ var author$project$Main$foodColour = 'yellow';
 var author$project$Main$height = 600;
 var author$project$Main$snakeColour = 'red';
 var author$project$Main$width = 1000;
-var elm$core$Debug$toString = _Debug_toString;
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -6619,73 +6641,71 @@ var author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						elm$html$Html$text(
-						elm$core$Debug$toString(model.direction) + (' ' + (elm$core$Debug$toString(model.food) + elm$core$Debug$toString(model.snake))))
-					])),
-				A2(
-				elm$html$Html$button,
-				_List_fromArray(
-					[
-						elm$html$Html$Events$onClick(author$project$Main$StartGame)
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text('start game')
-					])),
-				A2(
-				elm$svg$Svg$svg,
-				_List_fromArray(
-					[
-						elm$svg$Svg$Attributes$width(
-						elm$core$String$fromInt(author$project$Main$width)),
-						elm$svg$Svg$Attributes$height(
-						elm$core$String$fromInt(author$project$Main$height)),
-						elm$svg$Svg$Attributes$viewBox(
-						'0 0 ' + (elm$core$String$fromInt(author$project$Main$width) + (' ' + elm$core$String$fromInt(author$project$Main$height))))
-					]),
-				_List_fromArray(
-					[
 						A2(
-						elm$svg$Svg$defs,
-						_List_Nil,
+						elm$html$Html$button,
+						_List_fromArray(
+							[
+								elm$html$Html$Events$onClick(author$project$Main$StartGame)
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('start game')
+							])),
+						A2(
+						elm$svg$Svg$svg,
+						_List_fromArray(
+							[
+								elm$svg$Svg$Attributes$width(
+								elm$core$String$fromInt(author$project$Main$width)),
+								elm$svg$Svg$Attributes$height(
+								elm$core$String$fromInt(author$project$Main$height)),
+								elm$svg$Svg$Attributes$viewBox(
+								'0 0 ' + (elm$core$String$fromInt(author$project$Main$width) + (' ' + elm$core$String$fromInt(author$project$Main$height))))
+							]),
 						_List_fromArray(
 							[
 								A2(
-								elm$svg$Svg$filter,
-								_List_fromArray(
-									[
-										elm$svg$Svg$Attributes$id('glow'),
-										elm$svg$Svg$Attributes$width('200%'),
-										elm$svg$Svg$Attributes$height('200%'),
-										elm$svg$Svg$Attributes$x('-50%'),
-										elm$svg$Svg$Attributes$y('-50%')
-									]),
+								elm$svg$Svg$defs,
+								_List_Nil,
 								_List_fromArray(
 									[
 										A2(
-										elm$svg$Svg$feGaussianBlur,
+										elm$svg$Svg$filter,
 										_List_fromArray(
 											[
-												elm$svg$Svg$Attributes$in_('StrokePaint'),
-												elm$svg$Svg$Attributes$stdDeviation('3')
+												elm$svg$Svg$Attributes$id('glow'),
+												elm$svg$Svg$Attributes$width('200%'),
+												elm$svg$Svg$Attributes$height('200%'),
+												elm$svg$Svg$Attributes$x('-50%'),
+												elm$svg$Svg$Attributes$y('-50%')
 											]),
-										_List_Nil)
-									]))
-							])),
-						A2(
-						author$project$Main$drawThing,
-						author$project$Main$foodColour,
-						A2(
-							elm$core$Maybe$withDefault,
-							A2(author$project$Main$Position, 0, 0),
-							model.food)),
-						A2(
-						elm$svg$Svg$g,
-						_List_Nil,
-						A2(
-							elm$core$List$map,
-							author$project$Main$drawThing(author$project$Main$snakeColour),
-							A2(elm$core$Maybe$withDefault, _List_Nil, model.snake)))
+										_List_fromArray(
+											[
+												A2(
+												elm$svg$Svg$feGaussianBlur,
+												_List_fromArray(
+													[
+														elm$svg$Svg$Attributes$in_('StrokePaint'),
+														elm$svg$Svg$Attributes$stdDeviation('3')
+													]),
+												_List_Nil)
+											]))
+									])),
+								A2(
+								author$project$Main$drawThing,
+								author$project$Main$foodColour,
+								A2(
+									elm$core$Maybe$withDefault,
+									A2(author$project$Main$Position, 0, 0),
+									model.food)),
+								A2(
+								elm$svg$Svg$g,
+								_List_Nil,
+								A2(
+									elm$core$List$map,
+									author$project$Main$drawThing(author$project$Main$snakeColour),
+									A2(elm$core$Maybe$withDefault, _List_Nil, model.snake)))
+							]))
 					]))
 			]));
 };

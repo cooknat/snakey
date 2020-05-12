@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="acb9cba0-9421-4e82-a96d-dd40f99ffba2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmi" beforeDir="false" afterPath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmo" beforeDir="false" afterPath="$PROJECT_DIR$/elm-stuff/0.19.0/Main.elmo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elm-stuff/0.19.0/summary.dat" beforeDir="false" afterPath="$PROJECT_DIR$/elm-stuff/0.19.0/summary.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elm.json" beforeDir="false" afterPath="$PROJECT_DIR$/elm.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Snakey.elm" beforeDir="false" afterPath="$PROJECT_DIR$/src/Snakey.elm" afterDir="false" />
     </list>
@@ -21,14 +18,14 @@
     <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.8226704">
+    <splitter split-orientation="horizontal" split-proportion="0.83219814">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Snakey.elm">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="591">
-                  <caret line="296" selection-start-line="296" selection-end-line="296" />
+                <state relative-caret-position="727">
+                  <caret line="323" column="49" selection-start-line="323" selection-start-column="49" selection-end-line="323" selection-end-column="49" />
                   <folding>
                     <element signature="e#29#43#0" expanded="true" />
                   </folding>
@@ -73,8 +70,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.as">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="323">
-                  <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+                <state relative-caret-position="833">
+                  <caret line="49" selection-start-line="49" selection-end-line="49" />
                 </state>
               </provider>
             </entry>
@@ -205,18 +202,18 @@
       <workItem from="1587915823765" duration="1603000" />
       <workItem from="1587974528765" duration="4689000" />
       <workItem from="1588338656684" duration="12529000" />
-      <workItem from="1589010854267" duration="3293000" />
+      <workItem from="1589010854267" duration="6897000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87008000" />
+    <option name="totallyTimeSpent" value="90612000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="9" y="23" width="1645" height="935" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12583587" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.018237082" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -362,15 +359,15 @@
     </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+        <state relative-caret-position="833">
+          <caret line="49" selection-start-line="49" selection-end-line="49" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Snakey.elm">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="296" selection-start-line="296" selection-end-line="296" />
+        <state relative-caret-position="727">
+          <caret line="323" column="49" selection-start-line="323" selection-start-column="49" selection-end-line="323" selection-end-column="49" />
           <folding>
             <element signature="e#29#43#0" expanded="true" />
           </folding>
