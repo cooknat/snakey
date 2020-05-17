@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Snakey exposing (main)
 
 import Browser
 import Browser.Events exposing(onKeyPress)
@@ -14,7 +14,8 @@ type alias Model =
     { gameStarted: Bool
     , food : Maybe Position
     , snake : Snake
-    , direction :  Maybe Direction }
+    , direction :  Maybe Direction
+    , speed : Float }
 
 type alias Snake = Maybe (List Position)
 
@@ -73,7 +74,8 @@ initialModel =
     { gameStarted = False
     , food = Nothing
     , snake = Nothing
-    , direction = Nothing }
+    , direction = Nothing
+    , speed = 600 }
 
 
 type Msg
@@ -119,6 +121,9 @@ update msg model =
                  snacked =
                      snack model
 
+                 newSpeed =
+                     model.speed - 10
+
                  ( newSnake, removedPart ) =
                      moveySnakey dir model.snake
              in
@@ -126,7 +131,7 @@ update msg model =
                     True ->
                         case snacked of
                             True ->
-                               ( { model | snake = Just (newSnake ++ removedPart), gameStarted = not crashed }, getPositionCmd )
+                               ( { model | snake = Just (newSnake ++ removedPart), gameStarted = not crashed, speed = newSpeed }, getPositionCmd )
                             False ->
                                ( { model | snake = Just newSnake, gameStarted = not crashed }, Cmd.none )
 
@@ -301,7 +306,7 @@ toKey keyValue =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-            [ Time.every 600 Tick
+            [ Time.every model.speed Tick
             , onKeyPress keyDecoder
             ]
 
@@ -319,6 +324,5 @@ main =
 
 -- 10. sort out starting position based on direction and edges
 -- 11. change to arrow keys
--- 12. speed up with each food eaten
 -- 13. start game button either outside board or on a start page
 -- 14. score board and score with each food eaten
