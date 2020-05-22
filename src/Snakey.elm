@@ -15,7 +15,8 @@ type alias Model =
     , food : Maybe Position
     , snake : Snake
     , direction :  Maybe Direction
-    , speed : Float }
+    , speed : Float
+    , score : Int }
 
 type alias Snake = Maybe (List Position)
 
@@ -59,7 +60,8 @@ initialModel =
     , food = Nothing
     , snake = Nothing
     , direction = Nothing
-    , speed = 600 }
+    , speed = 600
+    , score = 10 }
 
 
 type Msg
@@ -84,45 +86,26 @@ getDirectionCmd = Random.generate GotNewDirection directionGenerator
 
 initSnake : Model -> Position -> Maybe (List Position)
 initSnake model position =
-    let
-        _ = Debug.log "in initsnake head " (Position (position.xPos * square + thingRadius) (position.yPos * square + thingRadius))
-
-    in
-        Just
-            [ Position (position.xPos * square + thingRadius) (position.yPos * square + thingRadius)
-            , (snakePos model position 1)
-            , (snakePos model position 2)
-            ]
+    Just
+        [ Position (position.xPos * square + thingRadius) (position.yPos * square + thingRadius)
+        , (snakePos model position 1)
+        , (snakePos model position 2)
+        ]
 
 
 snakePos : Model -> Position -> Int -> Position
 snakePos model position section =
-    let
-        _ = Debug.log "section in snakePos " section
-    in
-        case model.direction of
-            Just Up ->
-                let
-                    _ = Debug.log "up position " (Position (position.xPos * square + thingRadius) (position.yPos * square + (section * square) + thingRadius))
-                in
-                    Position (position.xPos * square + thingRadius) (position.yPos * square + (section * square) + thingRadius)
-            Just Down ->
-                let
-                    _ = Debug.log "down " (Position (position.xPos * square + thingRadius) (position.yPos * square - (section * square) + thingRadius))
-                in
-                    Position (position.xPos * square + thingRadius) (position.yPos * square - (section * square) + thingRadius)
-            Just Left ->
-                let
-                    _ = Debug.log "left " (Position (position.xPos * square + (section * square) + thingRadius) (position.yPos * square + thingRadius))
-                in
-                    Position (position.xPos * square + (section * square) + thingRadius) (position.yPos * square + thingRadius)
-            Just Right ->
-                let
-                    _ = Debug.log "right " (Position (position.xPos * square - (section * square) + thingRadius) (position.yPos * square + thingRadius))
-                in
-                    Position (position.xPos * square - (section * square) + thingRadius) (position.yPos * square + thingRadius)
-            _ ->
-                Position (position.xPos * square + square + thingRadius) (position.yPos * square + thingRadius)
+    case model.direction of
+        Just Up ->
+            Position (position.xPos * square + thingRadius) (position.yPos * square + (section * square) + thingRadius)
+        Just Down ->
+            Position (position.xPos * square + thingRadius) (position.yPos * square - (section * square) + thingRadius)
+        Just Left ->
+            Position (position.xPos * square + (section * square) + thingRadius) (position.yPos * square + thingRadius)
+        Just Right ->
+            Position (position.xPos * square - (section * square) + thingRadius) (position.yPos * square + thingRadius)
+        _ ->
+            Position (position.xPos * square + square + thingRadius) (position.yPos * square + thingRadius)
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -142,6 +125,9 @@ update msg model =
                  newSpeed =
                      model.speed - 10
 
+                 newScore =
+                     model.score + 1
+
                  ( newSnake, removedPart ) =
                      moveySnakey dir model.snake
              in
@@ -149,7 +135,7 @@ update msg model =
                     True ->
                         case snacked of
                             True ->
-                               ( { model | snake = Just (newSnake ++ removedPart), gameStarted = not crashed, speed = newSpeed }, getFoodCmd )
+                               ( { model | snake = Just (newSnake ++ removedPart), gameStarted = not crashed, speed = newSpeed, score = newScore }, getFoodCmd )
                             False ->
                                ( { model | snake = Just newSnake, gameStarted = not crashed }, Cmd.none )
                                --(model, Cmd.none)
@@ -174,10 +160,7 @@ update msg model =
             ( { model | food = Just (Position (position.xPos * square + square + thingRadius) (position.yPos * square + thingRadius)) }, Cmd.none)
 
         GotSnakeHead position ->
-            let
-                _ = Debug.log "position in GotSnakeHead " position
-            in
-                ( { model | snake =  initSnake model position }, Cmd.none)
+            ( { model | snake =  initSnake model position }, Cmd.none)
 
         GotNewDirection direction ->
             ({ model | direction = Just direction }, Cmd.none)
@@ -328,7 +311,7 @@ toKey keyValue =
 
                 "ArrowDown" ->
                     ChangeDirection Down
-                    
+
                 _ ->
                     ControlKey keyValue
 
@@ -350,7 +333,6 @@ main =
         , subscriptions = subscriptions
         }
 
--- 11. change to arrow keys
 -- 13. start game button either outside board or on a start page
 -- 14. score board and score with each food eaten
 -- 16. show message when game ends

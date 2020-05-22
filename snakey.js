@@ -5430,7 +5430,7 @@ var $elm$random$Random$generate = F2(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
 var $author$project$Snakey$getDirectionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewDirection, $author$project$Snakey$directionGenerator);
-var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, snake: $elm$core$Maybe$Nothing, speed: 600};
+var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, score: 10, snake: $elm$core$Maybe$Nothing, speed: 600};
 var $author$project$Snakey$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
@@ -6224,42 +6224,24 @@ var $author$project$Snakey$GotSnakeHead = function (a) {
 	return {$: 'GotSnakeHead', a: a};
 };
 var $author$project$Snakey$getSnakeHeadCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotSnakeHead, $author$project$Snakey$positionGenerator);
-var $elm$core$Debug$log = _Debug_log;
 var $author$project$Snakey$square = 10;
 var $author$project$Snakey$thingRadius = 5;
 var $author$project$Snakey$snakePos = F3(
 	function (model, position, section) {
-		var _v0 = A2($elm$core$Debug$log, 'section in snakePos ', section);
-		var _v1 = model.direction;
-		if (_v1.$ === 'Just') {
-			switch (_v1.a.$) {
+		var _v0 = model.direction;
+		if (_v0.$ === 'Just') {
+			switch (_v0.a.$) {
 				case 'Up':
-					var _v2 = _v1.a;
-					var _v3 = A2(
-						$elm$core$Debug$log,
-						'up position ',
-						A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius));
+					var _v1 = _v0.a;
 					return A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius);
 				case 'Down':
-					var _v4 = _v1.a;
-					var _v5 = A2(
-						$elm$core$Debug$log,
-						'down ',
-						A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius));
+					var _v2 = _v0.a;
 					return A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius);
 				case 'Left':
-					var _v6 = _v1.a;
-					var _v7 = A2(
-						$elm$core$Debug$log,
-						'left ',
-						A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
+					var _v3 = _v0.a;
 					return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
 				default:
-					var _v8 = _v1.a;
-					var _v9 = A2(
-						$elm$core$Debug$log,
-						'right ',
-						A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
+					var _v4 = _v0.a;
 					return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
 			}
 		} else {
@@ -6268,10 +6250,6 @@ var $author$project$Snakey$snakePos = F3(
 	});
 var $author$project$Snakey$initSnake = F2(
 	function (model, position) {
-		var _v0 = A2(
-			$elm$core$Debug$log,
-			'in initsnake head ',
-			A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
 		return $elm$core$Maybe$Just(
 			_List_fromArray(
 				[
@@ -6479,6 +6457,7 @@ var $author$project$Snakey$update = F2(
 			case 'Tick':
 				var snacked = $author$project$Snakey$snack(model);
 				var newSpeed = model.speed - 10;
+				var newScore = model.score + 1;
 				var dir = A2($elm$core$Maybe$withDefault, $author$project$Snakey$Right, model.direction);
 				var crashed = $author$project$Snakey$crash(model);
 				var _v1 = A2($author$project$Snakey$moveySnakey, dir, model.snake);
@@ -6492,6 +6471,7 @@ var $author$project$Snakey$update = F2(
 								model,
 								{
 									gameStarted: !crashed,
+									score: newScore,
 									snake: $elm$core$Maybe$Just(
 										_Utils_ap(newSnake, removedPart)),
 									speed: newSpeed
@@ -6543,7 +6523,6 @@ var $author$project$Snakey$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'GotSnakeHead':
 				var position = msg.a;
-				var _v4 = A2($elm$core$Debug$log, 'position in GotSnakeHead ', position);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
