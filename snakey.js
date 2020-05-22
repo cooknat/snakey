@@ -4358,6 +4358,43 @@ function _Browser_load(url)
 
 
 
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
+
+
+
 function _Time_now(millisToPosix)
 {
 	return _Scheduler_binding(function(callback)
@@ -4401,43 +4438,6 @@ function _Time_getZoneName()
 		callback(_Scheduler_succeed(name));
 	});
 }
-
-
-
-var _Bitwise_and = F2(function(a, b)
-{
-	return a & b;
-});
-
-var _Bitwise_or = F2(function(a, b)
-{
-	return a | b;
-});
-
-var _Bitwise_xor = F2(function(a, b)
-{
-	return a ^ b;
-});
-
-function _Bitwise_complement(a)
-{
-	return ~a;
-};
-
-var _Bitwise_shiftLeftBy = F2(function(offset, a)
-{
-	return a << offset;
-});
-
-var _Bitwise_shiftRightBy = F2(function(offset, a)
-{
-	return a >> offset;
-});
-
-var _Bitwise_shiftRightZfBy = F2(function(offset, a)
-{
-	return a >>> offset;
-});
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$LT = {$: 'LT'};
 var $elm$core$List$cons = _List_cons;
@@ -5227,9 +5227,210 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$Snakey$GotNewDirection = function (a) {
+	return {$: 'GotNewDirection', a: a};
+};
+var $author$project$Snakey$Down = {$: 'Down'};
+var $author$project$Snakey$Left = {$: 'Left'};
+var $author$project$Snakey$Right = {$: 'Right'};
+var $author$project$Snakey$Up = {$: 'Up'};
+var $elm$random$Random$addOne = function (value) {
+	return _Utils_Tuple2(1, value);
+};
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$random$Random$Generator = function (a) {
+	return {$: 'Generator', a: a};
+};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$random$Random$next = function (_v0) {
+	var state0 = _v0.a;
+	var incr = _v0.b;
+	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $elm$random$Random$peel = function (_v0) {
+	var state = _v0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var $elm$random$Random$float = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = $elm$random$Random$next(seed0);
+				var range = $elm$core$Basics$abs(b - a);
+				var n1 = $elm$random$Random$peel(seed1);
+				var n0 = $elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					$elm$random$Random$next(seed1));
+			});
+	});
+var $elm$random$Random$getByWeight = F3(
+	function (_v0, others, countdown) {
+		getByWeight:
+		while (true) {
+			var weight = _v0.a;
+			var value = _v0.b;
+			if (!others.b) {
+				return value;
+			} else {
+				var second = others.a;
+				var otherOthers = others.b;
+				if (_Utils_cmp(
+					countdown,
+					$elm$core$Basics$abs(weight)) < 1) {
+					return value;
+				} else {
+					var $temp$_v0 = second,
+						$temp$others = otherOthers,
+						$temp$countdown = countdown - $elm$core$Basics$abs(weight);
+					_v0 = $temp$_v0;
+					others = $temp$others;
+					countdown = $temp$countdown;
+					continue getByWeight;
+				}
+			}
+		}
+	});
+var $elm$random$Random$map = F2(
+	function (func, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v1 = genA(seed0);
+				var a = _v1.a;
+				var seed1 = _v1.b;
+				return _Utils_Tuple2(
+					func(a),
+					seed1);
+			});
+	});
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $elm$random$Random$weighted = F2(
+	function (first, others) {
+		var normalize = function (_v0) {
+			var weight = _v0.a;
+			return $elm$core$Basics$abs(weight);
+		};
+		var total = normalize(first) + $elm$core$List$sum(
+			A2($elm$core$List$map, normalize, others));
+		return A2(
+			$elm$random$Random$map,
+			A2($elm$random$Random$getByWeight, first, others),
+			A2($elm$random$Random$float, 0, total));
+	});
+var $elm$random$Random$uniform = F2(
+	function (value, valueList) {
+		return A2(
+			$elm$random$Random$weighted,
+			$elm$random$Random$addOne(value),
+			A2($elm$core$List$map, $elm$random$Random$addOne, valueList));
+	});
+var $author$project$Snakey$directionGenerator = A2(
+	$elm$random$Random$uniform,
+	$author$project$Snakey$Up,
+	_List_fromArray(
+		[$author$project$Snakey$Down, $author$project$Snakey$Left, $author$project$Snakey$Right]));
+var $elm$random$Random$Generate = function (a) {
+	return {$: 'Generate', a: a};
+};
+var $elm$random$Random$initialSeed = function (x) {
+	var _v0 = $elm$random$Random$next(
+		A2($elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _v0.a;
+	var incr = _v0.b;
+	var state2 = (state1 + x) >>> 0;
+	return $elm$random$Random$next(
+		A2($elm$random$Random$Seed, state2, incr));
+};
+var $elm$time$Time$Name = function (a) {
+	return {$: 'Name', a: a};
+};
+var $elm$time$Time$Offset = function (a) {
+	return {$: 'Offset', a: a};
+};
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var $elm$time$Time$customZone = $elm$time$Time$Zone;
+var $elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
+var $elm$time$Time$posixToMillis = function (_v0) {
+	var millis = _v0.a;
+	return millis;
+};
+var $elm$random$Random$init = A2(
+	$elm$core$Task$andThen,
+	function (time) {
+		return $elm$core$Task$succeed(
+			$elm$random$Random$initialSeed(
+				$elm$time$Time$posixToMillis(time)));
+	},
+	$elm$time$Time$now);
+var $elm$random$Random$step = F2(
+	function (_v0, seed) {
+		var generator = _v0.a;
+		return generator(seed);
+	});
+var $elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return $elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a.a;
+			var rest = commands.b;
+			var _v1 = A2($elm$random$Random$step, generator, seed);
+			var value = _v1.a;
+			var newSeed = _v1.b;
+			return A2(
+				$elm$core$Task$andThen,
+				function (_v2) {
+					return A3($elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2($elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var $elm$random$Random$onSelfMsg = F3(
+	function (_v0, _v1, seed) {
+		return $elm$core$Task$succeed(seed);
+	});
+var $elm$random$Random$cmdMap = F2(
+	function (func, _v0) {
+		var generator = _v0.a;
+		return $elm$random$Random$Generate(
+			A2($elm$random$Random$map, func, generator));
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
+var $elm$random$Random$command = _Platform_leaf('Random');
+var $elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return $elm$random$Random$command(
+			$elm$random$Random$Generate(
+				A2($elm$random$Random$map, tagger, generator)));
+	});
+var $author$project$Snakey$getDirectionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewDirection, $author$project$Snakey$directionGenerator);
 var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, snake: $elm$core$Maybe$Nothing, speed: 600};
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
-var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Snakey$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
@@ -5495,17 +5696,6 @@ var $elm$core$Dict$merge = F6(
 			leftovers);
 	});
 var $elm$core$Platform$sendToSelf = _Platform_sendToSelf;
-var $elm$time$Time$Name = function (a) {
-	return {$: 'Name', a: a};
-};
-var $elm$time$Time$Offset = function (a) {
-	return {$: 'Offset', a: a};
-};
-var $elm$time$Time$Zone = F2(
-	function (a, b) {
-		return {$: 'Zone', a: a, b: b};
-	});
-var $elm$time$Time$customZone = $elm$time$Time$Zone;
 var $elm$time$Time$setInterval = _Time_setInterval;
 var $elm$core$Process$spawn = _Scheduler_spawn;
 var $elm$time$Time$spawnHelp = F3(
@@ -5596,11 +5786,6 @@ var $elm$time$Time$onEffects = F3(
 				},
 				killTask));
 	});
-var $elm$time$Time$Posix = function (a) {
-	return {$: 'Posix', a: a};
-};
-var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
-var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
 		var _v0 = A2($elm$core$Dict$get, interval, state.taggers);
@@ -5881,14 +6066,11 @@ var $author$project$Snakey$subscriptions = function (model) {
 				$elm$browser$Browser$Events$onKeyPress($author$project$Snakey$keyDecoder)
 			]));
 };
-var $author$project$Snakey$Down = {$: 'Down'};
-var $author$project$Snakey$Left = {$: 'Left'};
 var $author$project$Snakey$Position = F2(
 	function (xPos, yPos) {
 		return {xPos: xPos, yPos: yPos};
 	});
-var $author$project$Snakey$Right = {$: 'Right'};
-var $author$project$Snakey$Up = {$: 'Up'};
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5928,9 +6110,6 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
 var $elm$core$List$tail = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5964,188 +6143,8 @@ var $author$project$Snakey$crash = function (model) {
 		$elm$core$List$tail(actualSnake));
 	return ((head.xPos < 5) || ((head.xPos > 995) || ((head.yPos < 5) || ((head.yPos > 595) || A2($elm$core$List$member, head, tail))))) ? true : false;
 };
-var $author$project$Snakey$GotNewDirection = function (a) {
-	return {$: 'GotNewDirection', a: a};
-};
-var $elm$random$Random$addOne = function (value) {
-	return _Utils_Tuple2(1, value);
-};
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var $elm$random$Random$Generator = function (a) {
-	return {$: 'Generator', a: a};
-};
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var $elm$random$Random$next = function (_v0) {
-	var state0 = _v0.a;
-	var incr = _v0.b;
-	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var $elm$core$Bitwise$xor = _Bitwise_xor;
-var $elm$random$Random$peel = function (_v0) {
-	var state = _v0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var $elm$random$Random$float = F2(
-	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = $elm$random$Random$next(seed0);
-				var range = $elm$core$Basics$abs(b - a);
-				var n1 = $elm$random$Random$peel(seed1);
-				var n0 = $elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					$elm$random$Random$next(seed1));
-			});
-	});
-var $elm$random$Random$getByWeight = F3(
-	function (_v0, others, countdown) {
-		getByWeight:
-		while (true) {
-			var weight = _v0.a;
-			var value = _v0.b;
-			if (!others.b) {
-				return value;
-			} else {
-				var second = others.a;
-				var otherOthers = others.b;
-				if (_Utils_cmp(
-					countdown,
-					$elm$core$Basics$abs(weight)) < 1) {
-					return value;
-				} else {
-					var $temp$_v0 = second,
-						$temp$others = otherOthers,
-						$temp$countdown = countdown - $elm$core$Basics$abs(weight);
-					_v0 = $temp$_v0;
-					others = $temp$others;
-					countdown = $temp$countdown;
-					continue getByWeight;
-				}
-			}
-		}
-	});
-var $elm$random$Random$map = F2(
-	function (func, _v0) {
-		var genA = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v1 = genA(seed0);
-				var a = _v1.a;
-				var seed1 = _v1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
-	});
-var $elm$core$List$sum = function (numbers) {
-	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
-};
-var $elm$random$Random$weighted = F2(
-	function (first, others) {
-		var normalize = function (_v0) {
-			var weight = _v0.a;
-			return $elm$core$Basics$abs(weight);
-		};
-		var total = normalize(first) + $elm$core$List$sum(
-			A2($elm$core$List$map, normalize, others));
-		return A2(
-			$elm$random$Random$map,
-			A2($elm$random$Random$getByWeight, first, others),
-			A2($elm$random$Random$float, 0, total));
-	});
-var $elm$random$Random$uniform = F2(
-	function (value, valueList) {
-		return A2(
-			$elm$random$Random$weighted,
-			$elm$random$Random$addOne(value),
-			A2($elm$core$List$map, $elm$random$Random$addOne, valueList));
-	});
-var $author$project$Snakey$directionGenerator = A2(
-	$elm$random$Random$uniform,
-	$author$project$Snakey$Up,
-	_List_fromArray(
-		[$author$project$Snakey$Down, $author$project$Snakey$Left, $author$project$Snakey$Right]));
-var $elm$random$Random$Generate = function (a) {
-	return {$: 'Generate', a: a};
-};
-var $elm$random$Random$initialSeed = function (x) {
-	var _v0 = $elm$random$Random$next(
-		A2($elm$random$Random$Seed, 0, 1013904223));
-	var state1 = _v0.a;
-	var incr = _v0.b;
-	var state2 = (state1 + x) >>> 0;
-	return $elm$random$Random$next(
-		A2($elm$random$Random$Seed, state2, incr));
-};
-var $elm$time$Time$posixToMillis = function (_v0) {
-	var millis = _v0.a;
-	return millis;
-};
-var $elm$random$Random$init = A2(
-	$elm$core$Task$andThen,
-	function (time) {
-		return $elm$core$Task$succeed(
-			$elm$random$Random$initialSeed(
-				$elm$time$Time$posixToMillis(time)));
-	},
-	$elm$time$Time$now);
-var $elm$random$Random$step = F2(
-	function (_v0, seed) {
-		var generator = _v0.a;
-		return generator(seed);
-	});
-var $elm$random$Random$onEffects = F3(
-	function (router, commands, seed) {
-		if (!commands.b) {
-			return $elm$core$Task$succeed(seed);
-		} else {
-			var generator = commands.a.a;
-			var rest = commands.b;
-			var _v1 = A2($elm$random$Random$step, generator, seed);
-			var value = _v1.a;
-			var newSeed = _v1.b;
-			return A2(
-				$elm$core$Task$andThen,
-				function (_v2) {
-					return A3($elm$random$Random$onEffects, router, rest, newSeed);
-				},
-				A2($elm$core$Platform$sendToApp, router, value));
-		}
-	});
-var $elm$random$Random$onSelfMsg = F3(
-	function (_v0, _v1, seed) {
-		return $elm$core$Task$succeed(seed);
-	});
-var $elm$random$Random$cmdMap = F2(
-	function (func, _v0) {
-		var generator = _v0.a;
-		return $elm$random$Random$Generate(
-			A2($elm$random$Random$map, func, generator));
-	});
-_Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
-var $elm$random$Random$command = _Platform_leaf('Random');
-var $elm$random$Random$generate = F2(
-	function (tagger, generator) {
-		return $elm$random$Random$command(
-			$elm$random$Random$Generate(
-				A2($elm$random$Random$map, tagger, generator)));
-	});
-var $author$project$Snakey$getDirectionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewDirection, $author$project$Snakey$directionGenerator);
-var $author$project$Snakey$GotNewPosition = function (a) {
-	return {$: 'GotNewPosition', a: a};
+var $author$project$Snakey$GotNewFood = function (a) {
+	return {$: 'GotNewFood', a: a};
 };
 var $elm$random$Random$int = F2(
 	function (a, b) {
@@ -6206,30 +6205,48 @@ var $author$project$Snakey$positionGenerator = A3(
 		}),
 	A2($elm$random$Random$int, 4, $author$project$Snakey$numCols - 4),
 	A2($elm$random$Random$int, 4, $author$project$Snakey$numRows - 4));
-var $author$project$Snakey$getPositionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewPosition, $author$project$Snakey$positionGenerator);
+var $author$project$Snakey$getFoodCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewFood, $author$project$Snakey$positionGenerator);
 var $author$project$Snakey$GotSnakeHead = function (a) {
 	return {$: 'GotSnakeHead', a: a};
 };
 var $author$project$Snakey$getSnakeHeadCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotSnakeHead, $author$project$Snakey$positionGenerator);
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Snakey$square = 10;
 var $author$project$Snakey$thingRadius = 5;
 var $author$project$Snakey$snakePos = F3(
 	function (model, position, section) {
-		var _v0 = model.direction;
-		if (_v0.$ === 'Just') {
-			switch (_v0.a.$) {
+		var _v0 = A2($elm$core$Debug$log, 'section in snakePos ', section);
+		var _v1 = model.direction;
+		if (_v1.$ === 'Just') {
+			switch (_v1.a.$) {
 				case 'Up':
-					var _v1 = _v0.a;
-					return A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius);
-				case 'Down':
-					var _v2 = _v0.a;
+					var _v2 = _v1.a;
+					var _v3 = A2(
+						$elm$core$Debug$log,
+						'up position ',
+						A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius));
 					return A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius);
+				case 'Down':
+					var _v4 = _v1.a;
+					var _v5 = A2(
+						$elm$core$Debug$log,
+						'down ',
+						A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius));
+					return A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, ((position.yPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius);
 				case 'Left':
-					var _v3 = _v0.a;
-					return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
-				default:
-					var _v4 = _v0.a;
+					var _v6 = _v1.a;
+					var _v7 = A2(
+						$elm$core$Debug$log,
+						'left ',
+						A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
 					return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) + (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
+				default:
+					var _v8 = _v1.a;
+					var _v9 = A2(
+						$elm$core$Debug$log,
+						'right ',
+						A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
+					return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) - (section * $author$project$Snakey$square)) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
 			}
 		} else {
 			return A2($author$project$Snakey$Position, ((position.xPos * $author$project$Snakey$square) + $author$project$Snakey$square) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius);
@@ -6237,6 +6254,10 @@ var $author$project$Snakey$snakePos = F3(
 	});
 var $author$project$Snakey$initSnake = F2(
 	function (model, position) {
+		var _v0 = A2(
+			$elm$core$Debug$log,
+			'in initsnake head ',
+			A2($author$project$Snakey$Position, (position.xPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius, (position.yPos * $author$project$Snakey$square) + $author$project$Snakey$thingRadius));
 		return $elm$core$Maybe$Just(
 			_List_fromArray(
 				[
@@ -6426,6 +6447,7 @@ var $author$project$Snakey$moveySnakey = F2(
 				newBody),
 			removedPart);
 	});
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$Snakey$snack = function (model) {
 	var actualSnake = A2($elm$core$Maybe$withDefault, _List_Nil, model.snake);
@@ -6460,7 +6482,7 @@ var $author$project$Snakey$update = F2(
 										_Utils_ap(newSnake, removedPart)),
 									speed: newSpeed
 								}),
-							$author$project$Snakey$getPositionCmd);
+							$author$project$Snakey$getFoodCmd);
 					} else {
 						return _Utils_Tuple2(
 							_Utils_update(
@@ -6520,8 +6542,8 @@ var $author$project$Snakey$update = F2(
 						{gameStarted: true}),
 					$elm$core$Platform$Cmd$batch(
 						_List_fromArray(
-							[$author$project$Snakey$getPositionCmd, $author$project$Snakey$getDirectionCmd, $author$project$Snakey$getSnakeHeadCmd])));
-			case 'GotNewPosition':
+							[$author$project$Snakey$getSnakeHeadCmd, $author$project$Snakey$getFoodCmd])));
+			case 'GotNewFood':
 				var position = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -6533,6 +6555,7 @@ var $author$project$Snakey$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'GotSnakeHead':
 				var position = msg.a;
+				var _v4 = A2($elm$core$Debug$log, 'position in GotSnakeHead ', position);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -6628,6 +6651,7 @@ var $elm$svg$Svg$Attributes$stdDeviation = _VirtualDom_attribute('stdDeviation')
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$core$Debug$toString = _Debug_toString;
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $author$project$Snakey$width = 1000;
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
@@ -6644,6 +6668,38 @@ var $author$project$Snakey$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$Debug$toString(model.snake))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$Debug$toString(model.direction))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$Debug$toString(model.gameStarted))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								$elm$core$Debug$toString(model.speed))
+							])),
 						A2(
 						$elm$html$Html$button,
 						_List_fromArray(
@@ -6699,7 +6755,7 @@ var $author$project$Snakey$view = function (model) {
 								$author$project$Snakey$foodColour,
 								A2(
 									$elm$core$Maybe$withDefault,
-									A2($author$project$Snakey$Position, 0, 0),
+									A2($author$project$Snakey$Position, -10, -10),
 									model.food)),
 								A2(
 								$elm$svg$Svg$g,
@@ -6715,7 +6771,7 @@ var $author$project$Snakey$view = function (model) {
 var $author$project$Snakey$main = $elm$browser$Browser$element(
 	{
 		init: function (_v0) {
-			return _Utils_Tuple2($author$project$Snakey$initialModel, $elm$core$Platform$Cmd$none);
+			return _Utils_Tuple2($author$project$Snakey$initialModel, $author$project$Snakey$getDirectionCmd);
 		},
 		subscriptions: $author$project$Snakey$subscriptions,
 		update: $author$project$Snakey$update,
