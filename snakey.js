@@ -5836,6 +5836,9 @@ var $elm$time$Time$every = F2(
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Snakey$ChangeDirection = function (a) {
+	return {$: 'ChangeDirection', a: a};
+};
 var $author$project$Snakey$CharacterKey = function (a) {
 	return {$: 'CharacterKey', a: a};
 };
@@ -5849,7 +5852,18 @@ var $author$project$Snakey$toKey = function (keyValue) {
 		var _char = _v1.a;
 		return $author$project$Snakey$CharacterKey(_char);
 	} else {
-		return $author$project$Snakey$ControlKey(keyValue);
+		switch (keyValue) {
+			case 'ArrowRight':
+				return $author$project$Snakey$ChangeDirection($author$project$Snakey$Right);
+			case 'ArrowLeft':
+				return $author$project$Snakey$ChangeDirection($author$project$Snakey$Left);
+			case 'ArrowUp':
+				return $author$project$Snakey$ChangeDirection($author$project$Snakey$Up);
+			case 'ArrowDown':
+				return $author$project$Snakey$ChangeDirection($author$project$Snakey$Down);
+			default:
+				return $author$project$Snakey$ControlKey(keyValue);
+		}
 	}
 };
 var $author$project$Snakey$keyDecoder = A2(
@@ -6057,13 +6071,13 @@ var $elm$browser$Browser$Events$on = F3(
 		return $elm$browser$Browser$Events$subscription(
 			A3($elm$browser$Browser$Events$MySub, node, name, decoder));
 	});
-var $elm$browser$Browser$Events$onKeyPress = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'keypress');
+var $elm$browser$Browser$Events$onKeyDown = A2($elm$browser$Browser$Events$on, $elm$browser$Browser$Events$Document, 'keydown');
 var $author$project$Snakey$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
 				A2($elm$time$Time$every, model.speed, $author$project$Snakey$Tick),
-				$elm$browser$Browser$Events$onKeyPress($author$project$Snakey$keyDecoder)
+				$elm$browser$Browser$Events$onKeyDown($author$project$Snakey$keyDecoder)
 			]));
 };
 var $author$project$Snakey$Position = F2(
@@ -6496,43 +6510,17 @@ var $author$project$Snakey$update = F2(
 				} else {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
+			case 'ChangeDirection':
+				var direction = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							direction: $elm$core$Maybe$Just(direction)
+						}),
+					$elm$core$Platform$Cmd$none);
 			case 'CharacterKey':
-				switch (msg.a.valueOf()) {
-					case 'i':
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{
-									direction: $elm$core$Maybe$Just($author$project$Snakey$Up)
-								}),
-							$elm$core$Platform$Cmd$none);
-					case 'j':
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{
-									direction: $elm$core$Maybe$Just($author$project$Snakey$Left)
-								}),
-							$elm$core$Platform$Cmd$none);
-					case 'k':
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{
-									direction: $elm$core$Maybe$Just($author$project$Snakey$Right)
-								}),
-							$elm$core$Platform$Cmd$none);
-					case 'm':
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{
-									direction: $elm$core$Maybe$Just($author$project$Snakey$Down)
-								}),
-							$elm$core$Platform$Cmd$none);
-					default:
-						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
+				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 'ControlKey':
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 'StartGame':
@@ -6651,7 +6639,6 @@ var $elm$svg$Svg$Attributes$stdDeviation = _VirtualDom_attribute('stdDeviation')
 var $elm$svg$Svg$svg = $elm$svg$Svg$trustedNode('svg');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $elm$core$Debug$toString = _Debug_toString;
 var $elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var $author$project$Snakey$width = 1000;
 var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
@@ -6668,38 +6655,6 @@ var $author$project$Snakey$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$Debug$toString(model.snake))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$Debug$toString(model.direction))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$Debug$toString(model.gameStarted))
-							])),
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$Debug$toString(model.speed))
-							])),
 						A2(
 						$elm$html$Html$button,
 						_List_fromArray(

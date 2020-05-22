@@ -1,7 +1,7 @@
 module Snakey exposing (main)
 
 import Browser
-import Browser.Events exposing(onKeyPress)
+import Browser.Events exposing(onKeyDown)
 import Html exposing (Html, button, div, text, p)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
@@ -70,6 +70,7 @@ type Msg
     | GotNewFood Position
     | GotNewDirection Direction
     | GotSnakeHead Position
+    | ChangeDirection Direction
 
 
 getFoodCmd : Cmd Msg
@@ -156,18 +157,10 @@ update msg model =
                     False ->
                         ( model, Cmd.none )
 
-        CharacterKey 'i' ->
-             ( { model | direction = Just Up }, Cmd.none )
+        ChangeDirection direction ->
+             ( { model | direction = Just direction }, Cmd.none )
 
-        CharacterKey 'j' ->
-             ( { model | direction = Just Left }, Cmd.none )
-
-        CharacterKey 'k' ->
-             ( { model | direction = Just Right }, Cmd.none )
-
-        CharacterKey 'm' ->
-             ( { model | direction = Just Down }, Cmd.none )
-
+        --keeping this for pause etc
         CharacterKey _ ->
              ( model, Cmd.none )
 
@@ -263,11 +256,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ div []
-        [ div [] [ Html.text (Debug.toString model.snake) ]
-        , div [] [ Html.text (Debug.toString model.direction) ]
-        , div [] [ Html.text (Debug.toString model.gameStarted) ]
-        , div [] [ Html.text (Debug.toString model.speed) ]
-        , button [ onClick StartGame ]  [ Html.text "start game" ]
+        [ button [ onClick StartGame ]  [ Html.text "start game" ]
         , svg
             [ Svg.Attributes.width (String.fromInt width)
             , Svg.Attributes.height (String.fromInt height)
@@ -326,13 +315,30 @@ toKey keyValue =
             CharacterKey char
 
         _ ->
-            ControlKey keyValue
+
+            case keyValue of
+                "ArrowRight" ->
+                    ChangeDirection Right
+
+                "ArrowLeft" ->
+                    ChangeDirection Left
+
+                "ArrowUp" ->
+                    ChangeDirection Up
+
+                "ArrowDown" ->
+                    ChangeDirection Down
+                    
+                _ ->
+                    ControlKey keyValue
+
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
             [ Time.every model.speed Tick
-            , onKeyPress keyDecoder
+            , onKeyDown keyDecoder
             ]
 
 main : Program () Model Msg
@@ -344,9 +350,10 @@ main =
         , subscriptions = subscriptions
         }
 
-
--- 10. sort out starting position based on direction and edges
 -- 11. change to arrow keys
 -- 13. start game button either outside board or on a start page
 -- 14. score board and score with each food eaten
 -- 16. show message when game ends
+-- 17. multicolours
+-- 18. difficulty levels
+-- 19. obstacles
