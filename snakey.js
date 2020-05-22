@@ -5430,7 +5430,7 @@ var $elm$random$Random$generate = F2(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
 var $author$project$Snakey$getDirectionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewDirection, $author$project$Snakey$directionGenerator);
-var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, score: 10, snake: $elm$core$Maybe$Nothing, speed: 600};
+var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, score: 10, snake: $elm$core$Maybe$Nothing, speed: 500};
 var $author$project$Snakey$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
@@ -6639,6 +6639,16 @@ var $author$project$Snakey$view = function (model) {
 		_List_fromArray(
 			[
 				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Snakey$StartGame)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('start game')
+					])),
+				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
@@ -6646,16 +6656,6 @@ var $author$project$Snakey$view = function (model) {
 					]),
 				_List_fromArray(
 					[
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Events$onClick($author$project$Snakey$StartGame)
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('start game')
-							])),
 						A2(
 						$elm$svg$Svg$svg,
 						_List_fromArray(

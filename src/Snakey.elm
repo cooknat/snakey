@@ -239,33 +239,37 @@ directionGenerator =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ Attr.id "game-container" ]
-        [ button [ onClick StartGame ]  [ Html.text "start game" ]
-        , svg
-            [ Svg.Attributes.width (String.fromInt width)
-            , Svg.Attributes.height (String.fromInt height)
-            , viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
-            ]
-            [ Svg.defs []
-                [ Svg.filter
-                    [ Svg.Attributes.id "glow"
-                    , Svg.Attributes.width "200%"
-                    , Svg.Attributes.height "200%"
-                    , x "-50%"
-                    , y "-50%"
-                    ]
-                    [ Svg.feGaussianBlur
-                        [ Svg.Attributes.in_ "StrokePaint"
-                        , stdDeviation "3"
-                        ]
-                        []
-                    ]
-                ]
-              , drawThing foodColour (Maybe.withDefault (Position -10 -10) model.food)
-              , Svg.g [] (List.map (drawThing snakeColour) (Maybe.withDefault [] model.snake) )
-            ]
-          ]
+    [ button [ onClick StartGame ]  [ Html.text "start game" ]
+    ,
+    div [ Attr.id "game-container" ]
+    [ svg
+        [ Svg.Attributes.width (String.fromInt width)
+        , Svg.Attributes.height (String.fromInt height)
+        , viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
         ]
+        [ Svg.defs []
+            [ Svg.filter
+                [ Svg.Attributes.id "glow"
+                , Svg.Attributes.width "200%"
+                , Svg.Attributes.height "200%"
+                , x "-50%"
+                , y "-50%"
+                ]
+                [ Svg.feGaussianBlur
+                    [ Svg.Attributes.in_ "StrokePaint"
+                    , stdDeviation "3"
+                    ]
+                    []
+                ]
+            ]
+          , drawThing foodColour (Maybe.withDefault (Position -10 -10) model.food)
+          , Svg.g [] (List.map (drawThing snakeColour) (Maybe.withDefault [] model.snake) )
+        ]
+      ]
+    ]
+    
+
+
 
 drawThing : String -> Position -> Svg.Svg msg
 drawThing colour position =
