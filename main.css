@@ -2,7 +2,7 @@ body {
     margin: 0px;
 }
 
-#header {
+#page {
     height: 100vh;
     background-color: #042963;
     display: flex;
@@ -10,26 +10,9 @@ body {
     align-items: center;
 }
 
-#container {
-    border: 8px solid #b2dbdb;
-}
-
-#container,
-#game {
+#game-container {
     background-color: #335882;
+    border: 8px solid #b2dbdb;
     width: 1000px;
     height: 600px;
-}
-
-.ra {
-    text-align: right;
-}
-
-.la {
-    text-align: left;
-}
-
-th,
-td {
-    padding: 8px 26px;
 }

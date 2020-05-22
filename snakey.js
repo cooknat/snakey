@@ -6594,6 +6594,15 @@ var $elm$svg$Svg$filter = $elm$svg$Svg$trustedNode('filter');
 var $author$project$Snakey$foodColour = 'yellow';
 var $author$project$Snakey$height = 600;
 var $elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$svg$Svg$Attributes$id = _VirtualDom_attribute('id');
 var $elm$svg$Svg$Attributes$in_ = _VirtualDom_attribute('in');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
@@ -6631,7 +6640,10 @@ var $author$project$Snakey$view = function (model) {
 			[
 				A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('game-container')
+					]),
 				_List_fromArray(
 					[
 						A2(

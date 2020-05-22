@@ -2,6 +2,7 @@ module Snakey exposing (main)
 
 import Browser
 import Browser.Events exposing(onKeyDown)
+import Html.Attributes as Attr exposing (id)
 import Html exposing (Html, button, div, text, p)
 import Html.Events exposing (onClick)
 import Svg exposing (..)
@@ -60,7 +61,7 @@ initialModel =
     , food = Nothing
     , snake = Nothing
     , direction = Nothing
-    , speed = 600
+    , speed = 500
     , score = 10 }
 
 
@@ -238,7 +239,7 @@ directionGenerator =
 view : Model -> Html Msg
 view model =
     div []
-        [ div []
+        [ div [ Attr.id "game-container" ]
         [ button [ onClick StartGame ]  [ Html.text "start game" ]
         , svg
             [ Svg.Attributes.width (String.fromInt width)
