@@ -16,3 +16,8 @@ body {
     width: 1000px;
     height: 600px;
 }
+
+#scoreboard {
+    color: white;
+    font-size: 16px;
+}

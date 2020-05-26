@@ -61,8 +61,8 @@ initialModel =
     , food = Nothing
     , snake = Nothing
     , direction = Nothing
-    , speed = 500
-    , score = 10 }
+    , speed = 450
+    , score = 0 }
 
 
 type Msg
@@ -124,7 +124,7 @@ update msg model =
                      snack model
 
                  newSpeed =
-                     model.speed - 10
+                     model.speed - 15
 
                  newScore =
                      model.score + 1
@@ -238,36 +238,40 @@ directionGenerator =
 
 view : Model -> Html Msg
 view model =
-    div []
-    [ button [ onClick StartGame ]  [ Html.text "start game" ]
-    ,
-    div [ Attr.id "game-container" ]
-    [ svg
-        [ Svg.Attributes.width (String.fromInt width)
-        , Svg.Attributes.height (String.fromInt height)
-        , viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
-        ]
-        [ Svg.defs []
-            [ Svg.filter
-                [ Svg.Attributes.id "glow"
-                , Svg.Attributes.width "200%"
-                , Svg.Attributes.height "200%"
-                , x "-50%"
-                , y "-50%"
-                ]
-                [ Svg.feGaussianBlur
-                    [ Svg.Attributes.in_ "StrokePaint"
-                    , stdDeviation "3"
-                    ]
-                    []
-                ]
+    let
+        scoreboard = "Score: " ++ (String.fromInt model.score)
+    in
+        div []
+        [ button [ onClick StartGame ]  [ Html.text "start game" ]
+        , div [ Attr.id "scoreboard" ] [ Html.text scoreboard ]
+        ,
+        div [ Attr.id "game-container" ]
+        [ svg
+            [ Svg.Attributes.width (String.fromInt width)
+            , Svg.Attributes.height (String.fromInt height)
+            , viewBox <| "0 0 " ++ (String.fromInt width) ++ " " ++ (String.fromInt height)
             ]
-          , drawThing foodColour (Maybe.withDefault (Position -10 -10) model.food)
-          , Svg.g [] (List.map (drawThing snakeColour) (Maybe.withDefault [] model.snake) )
+            [ Svg.defs []
+                [ Svg.filter
+                    [ Svg.Attributes.id "glow"
+                    , Svg.Attributes.width "200%"
+                    , Svg.Attributes.height "200%"
+                    , x "-50%"
+                    , y "-50%"
+                    ]
+                    [ Svg.feGaussianBlur
+                        [ Svg.Attributes.in_ "StrokePaint"
+                        , stdDeviation "3"
+                        ]
+                        []
+                    ]
+                ]
+              , drawThing foodColour (Maybe.withDefault (Position -10 -10) model.food)
+              , Svg.g [] (List.map (drawThing snakeColour) (Maybe.withDefault [] model.snake) )
+            ]
+          ]
         ]
-      ]
-    ]
-    
+
 
 
 
@@ -338,9 +342,10 @@ main =
         , subscriptions = subscriptions
         }
 
--- 13. start game button either outside board or on a start page
--- 14. score board and score with each food eaten
+
 -- 16. show message when game ends
 -- 17. multicolours
 -- 18. difficulty levels
 -- 19. obstacles
+-- 20. speed change gets lower as score goes up
+-- 21. make the scoreboard look a bit nicer

@@ -5430,7 +5430,7 @@ var $elm$random$Random$generate = F2(
 				A2($elm$random$Random$map, tagger, generator)));
 	});
 var $author$project$Snakey$getDirectionCmd = A2($elm$random$Random$generate, $author$project$Snakey$GotNewDirection, $author$project$Snakey$directionGenerator);
-var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, score: 10, snake: $elm$core$Maybe$Nothing, speed: 500};
+var $author$project$Snakey$initialModel = {direction: $elm$core$Maybe$Nothing, food: $elm$core$Maybe$Nothing, gameStarted: false, score: 0, snake: $elm$core$Maybe$Nothing, speed: 450};
 var $author$project$Snakey$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
@@ -6456,7 +6456,7 @@ var $author$project$Snakey$update = F2(
 		switch (msg.$) {
 			case 'Tick':
 				var snacked = $author$project$Snakey$snack(model);
-				var newSpeed = model.speed - 10;
+				var newSpeed = model.speed - 15;
 				var newScore = model.score + 1;
 				var dir = A2($elm$core$Maybe$withDefault, $author$project$Snakey$Right, model.direction);
 				var crashed = $author$project$Snakey$crash(model);
@@ -6633,6 +6633,7 @@ var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
 var $author$project$Snakey$view = function (model) {
+	var scoreboard = 'Score: ' + $elm$core$String$fromInt(model.score);
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -6647,6 +6648,16 @@ var $author$project$Snakey$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text('start game')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$id('scoreboard')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(scoreboard)
 					])),
 				A2(
 				$elm$html$Html$div,
